@@ -1,0 +1,168 @@
+﻿@page "{searchString?}"
+@using ContactsModule.Pages
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model IndexModel
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Contacts Page </title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Compiled and minified CSS -->
+    <!-- Font Awesome -->
+    @*<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">*@
+    <link rel="stylesheet" href="~/plugins/fontawesome-free/css/all.min.css">
+    <!-- Ionicons -->
+
+    <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- overlayScrollbars -->
+    <link rel="stylesheet" href="~/dist/css/adminlte.min.css">
+    <!-- Google Font: Source Sans Pro -->
+
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+</head>
+<body class="sidebar-collapse">
+    <!-- Site wrapper -->
+    <!-- Navbar -->
+    <nav class="navbar navbar-white navbar-light">
+        <!-- SEARCH FORM -->
+        <div class="form-inline ml-3 ">
+            <div class="input-group input-group-sm ">
+                <form>
+                    <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search" asp-for="SearchString">
+                    <button class="btn btn-navbar" type="submit">
+                        <i class="fas fa-search"></i>
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+        <form method="post" enctype="multipart/form-data">
+
+            <div class="dropdown">
+                <a asp-page="./AddPerson" class="btn btn-sm btn-default">Person Add</a>
+
+
+                <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
+                    Dropdown button
+                </button>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <button asp-page-handler="export" class="dropdown-item">Export Contacts</button>
+
+
+                    <input type="file" asp-for="Upload" accept=".csv">
+                    <button asp-page-handler="Import" class="dropdown-item"  >Import Contacts</button>
+
+                </div>
+            </div>
+
+        </form>
+
+    </nav>
+    <!-- /.navbar -->
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header"></section>
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Contacts @ViewData["MyString"]</h1>
+                </div>
+
+            </div>
+        </div><!-- /.container-fluid -->
+        <!-- Main content -->
+        <section class="content">
+
+
+            <!-- Default box -->
+            <div class="card card-solid">
+                <form method="post">
+                    <div class="card-body pb-0">
+
+
+                        <div class="row d-flex align-items-stretch">
+
+
+                            @foreach (var item in Model?.Contacts)
+                            {
+
+                                <div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch">
+
+                                    <div class="card bg-light">
+
+                                        <div class="card-header text-muted border-bottom-0">
+                                            @item.Job
+                                        </div>
+                                        <div class="card-body pt-0">
+                                            <div class="row">
+                                                <div class="col-7">
+                                                    <h2 class="lead"><b>@item.Firstname @item.Lastname</b></h2>
+                                                    <p class="text-muted text-sm"><b>Adress: </b> @item.Address</p>
+                                                    <ul class="ml-4 mb-0 fa-ul text-muted">
+                                                        <li class="small"><span class="fa-li"><i class="fas fa-lg fa-building"></i></span>@item.Email</li>
+                                                        <li class="small"><span class="fa-li"><i class="fas fa-lg fa-phone"></i></span>@item.PhoneNumber</li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-5 text-center">
+                                                    <img src="~/dist/img/user1-128x128.jpg" alt="" class="img-circle img-fluid">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="card-footer">
+                                            <div class="text-right">
+                                                <button type="submit" asp-page-handler="delete" asp-route-id="@item.ContactId" class="btn btn-sm bg-teal">
+                                                    Delete
+                                                </button>
+                                                <a asp-page="./Edit" asp-route-id="@item.ContactId" class="btn btn-sm btn-primary">Edit</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+
+
+                        </div>
+
+                    </div>
+                </form>
+                <!-- /.card-body -->
+
+            </div>
+            <!-- /.card -->
+
+        </section>
+        <!-- /.content -->
+
+        <footer class="main-footer">
+            <strong>Copyright &copy; 2020.</strong> Tugce Buket MIZRAK
+
+        </footer>
+
+        <!-- Control Sidebar -->
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Control sidebar content goes here -->
+        </aside>
+        <!-- /.control-sidebar -->
+    </div>
+    <!-- ./wrapper -->
+    <!-- jQuery -->
+    <script src="~/plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="~/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="~/dist/js/adminlte.min.js"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="~/dist/js/demo.js"></script>
+
+</body>
+</html>
