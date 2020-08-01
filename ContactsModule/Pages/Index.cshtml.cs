@@ -77,7 +77,7 @@ namespace ContactsModule.Pages
         {
 
             List<object> export = (from expcontact in _context.Contacts.ToList()
-                                   select new[] { expcontact.ContactId.ToString(),
+                                   select new[] { 
                                           expcontact.Firstname,
                                           expcontact.Lastname,
                                           expcontact.PhoneNumber,
@@ -88,15 +88,21 @@ namespace ContactsModule.Pages
 
                                           }).ToList<object>();
 
-            //export.Insert(0, new string[7] { "Id", "Firstname", "Lastname", "Address", "Email", "Job", "Phone" });
+            export.Insert(0, new string[6] { "Firstname", "Lastname", "Phone", "Email", "Address", "Job" });
 
             for (int i = 0; i < export.Count; i++)
             {
                 string[] customer = (string[])export[i];
                 for (int j = 0; j < customer.Length; j++)
                 {
+                    if(j == 5)
+                    {
+                        sb.Append(customer[j]);
+                        continue;
+                    }
                     //Append data with separator.
                     sb.Append(customer[j] + ',');
+                    
                 }
 
                 //Append new line character.
@@ -118,8 +124,8 @@ namespace ContactsModule.Pages
 
 
             DataTable dtable = new DataTable();
-            dtable.Columns.AddRange(new DataColumn[7] {
-                new DataColumn("contact_id", typeof(int)),
+            dtable.Columns.AddRange(new DataColumn[6] {
+                
                 new DataColumn("firstname", typeof(string)),
                 new DataColumn("lastname", typeof(string)),
                 new DataColumn("phoneNumber", typeof(string)),
@@ -130,18 +136,26 @@ namespace ContactsModule.Pages
 
             });
             string data = System.IO.File.ReadAllText(path);
+            int controlID = 0;
             foreach (string row in data.Split("\r\n"))
             {
-                
+                if (controlID == 0 && row == "Firstname,Lastname,Phone,Email,Address,Job")
+                {
+                    controlID = 1;
+                    continue;
+                }
+                else if (controlID == 0 && row != "Firstname,Lastname,Phone,Email,Address,Job")
+                    break;
+
                 if (!string.IsNullOrEmpty(row))
                 {
                     dtable.Rows.Add();
                     int i = 0;
                     foreach (string cell in row.Split(','))
                     {
-                        if(i <= 6)
+                        if(i < 5)
                         {
-                            dtable.Rows[dtable.Rows.Count - 1][i] = cell;
+                            dtable.Rows[dtable.Rows.Count-1][i+1] = cell;
                             i++;
 
                         }
